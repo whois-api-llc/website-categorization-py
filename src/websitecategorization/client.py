@@ -8,7 +8,7 @@ from .exceptions.error import ParameterError, EmptyApiKeyError, \
 
 
 class Client:
-    __default_url = "https://website-categorization.whoisxmlapi.com/api/v2"
+    __default_url = "https://website-categorization.whoisxmlapi.com/api/v3"
     _api_requester: ApiRequester or None
     _api_key: str
 
@@ -22,7 +22,6 @@ class Client:
 
     JSON_FORMAT = 'json'
     XML_FORMAT = 'xml'
-    CSV_FORMAT = 'csv'
 
     __DATETIME_OR_NONE_MSG = 'Value should be None or an instance of ' \
                              'datetime.date'
@@ -116,8 +115,7 @@ class Client:
         :param domain: Domain name, string
         :param min_confidence: Minimal confidence value. The higher this
             value the fewer false-positive results will be returned, float
-        :param output_format: Use Client.JSON_FORMAT, Client.XML_FORMAT,
-            Client.CSV_FORMAT constants
+        :param output_format: Use Client.JSON_FORMAT, Client.XML_FORMAT constants
         :return: str
         :raises ConnectionError:
         :raises WebsiteCategorizationApiError: Base class for all errors below
@@ -163,12 +161,12 @@ class Client:
     @staticmethod
     def _validate_output_format(value: str):
         if value.lower() in {Client.JSON_FORMAT,
-                             Client.XML_FORMAT, Client.CSV_FORMAT}:
+                             Client.XML_FORMAT}:
             return value.lower()
 
         raise ParameterError(
             f"Response format must be {Client.JSON_FORMAT} "
-            f"or {Client.XML_FORMAT} or {Client.CSV_FORMAT}")
+            f"or {Client.XML_FORMAT}")
 
     @staticmethod
     def _validate_confidence(value: float):

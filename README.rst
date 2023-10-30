@@ -30,7 +30,7 @@ Installation
 Examples
 ========
 
-Full API documentation available `here <https://website-categorization.whoisxmlapi.com/api/documentation/making-requests>`_
+Full API documentation available `here <https://website-categorization.whoisxmlapi.com/api/documentation/v3/making-requests>`_
 
 Create a new client
 -------------------
@@ -51,10 +51,7 @@ Make basic requests
     print("Responded? " + "Yes" if response.website_responded else "No")
     if response.website_responded:
         for cat in response.categories:
-            if cat.tier1:
-                print("Tier1 cat: " + str(cat.tier1.name))
-            if cat.tier2:
-                print("Tier2 cat: " + str(cat.tier2.name))
+            print("Cat: " + str(cat.name))
 
 Advanced usage
 -------------------
@@ -66,6 +63,5 @@ Extra request parameters
     # Specifying minimal level of confidence
     response = client.data('whoisxmlapi.com', 0.75)
 
-    # Getting raw API response in XML and CSV
+    # Getting raw API response in XML
     xml = client.raw_data('whoisxmlapi.com', output_format=Client.XML_FORMAT)
-    csv = client.raw_data('whoisxmlapi.com', output_format=Client.CSV_FORMAT)

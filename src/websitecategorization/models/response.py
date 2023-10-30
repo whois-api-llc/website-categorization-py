@@ -44,60 +44,72 @@ def _bool_value(values: dict, key: str) -> bool:
     return False
 
 
-class Tier(BaseModel):
+class Category(BaseModel):
     confidence: float
-    id: str
+    id: int
     name: str
 
     def __init__(self, values):
         super().__init__()
         self.confidence = 0.0
         self.name = ""
-        self.id = ""
+        self.id = 0
 
         if values is not None:
             self.confidence = _float_value(values, 'confidence')
-            self.id = _string_value(values, 'id')
+            self.id = _int_value(values, 'id')
             self.name = _string_value(values, 'name')
 
 
-class Category(BaseModel):
-    tier1: Tier or None
-    tier2: Tier or None
+class AS(BaseModel):
+    asn: int
+    domain: str
+    name: str
+    route: str
+    type: str
 
     def __init__(self, values):
         super().__init__()
-
-        self.tier1 = None
-        self.tier2 = None
+        self.asn = 0
+        self.domain = ""
+        self.name = ""
+        self.route = ""
+        self.type = ""
 
         if values is not None:
-            if 'tier1' in values and values['tier1']:
-                self.tier1 = Tier(values['tier1'])
-            if 'tier2' in values and values['tier2']:
-                self.tier2 = Tier(values['tier2'])
+            self.asn = _int_value(values, 'asn')
+            self.domain = _string_value(values, 'domain')
+            self.name = _string_value(values, 'name')
+            self.route = _string_value(values, 'route')
+            self.type = _string_value(values, 'type')
 
 
 class Response(BaseModel):
+    as_field: AS or None
     domain_name: str
-    website_responded: bool
     if sys.version_info < (3, 9):
         categories: typing.List[Category]
     else:
         categories: [Category]
+    created_date: str or None
+    website_responded: bool
 
     def __init__(self, values):
         super().__init__()
 
+        self.as_field = None
         self.domain_name = ""
-        self.website_responded = False
         self.categories = []
+        self.created_date = None
+        self.website_responded = False
 
         if values is not None:
+            if 'as' in values and values['as']:
+                self.as_field = AS(values['as'])
             self.domain_name = _string_value(values, 'domainName')
+            self.categories = _list_of_objects(values, 'categories', 'Category')
+            self.created_date = _string_value(values, 'createdDate')
             self.website_responded = _bool_value(values, 'websiteResponded')
-            self.categories = _list_of_objects(
-                values, 'categories', 'Category')
 
 
 class ErrorMessage(BaseModel):
