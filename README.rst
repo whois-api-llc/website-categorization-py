@@ -18,7 +18,7 @@ The client library for
 `Website Categorization API <https://website-categorization.whoisxmlapi.com/>`_
 in Python language.
 
-The minimum Python version is 3.6.
+The minimum Python version is 3.7.
 
 Installation
 ============
