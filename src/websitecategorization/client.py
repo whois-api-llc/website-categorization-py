@@ -77,6 +77,32 @@ class Client:
     def timeout(self, value: float):
         self._api_requester.timeout = value
 
+    def list_categories(self, order: str or None = None, output_format: str or None = None) -> list:
+        """
+        Get all available categories.
+
+        :return: list
+        :raises ConnectionError:
+        :raises WebsiteCategorizationApiError: Base class for all errors below
+        :raises ResponseError: response contains an error message
+        :raises ApiAuthError: Server returned 401, 402 or 403 HTTP code
+        :raises BadRequestError: Server returned 400 or 422 HTTP code
+        :raises HttpApiError: HTTP code >= 300 and not equal to above codes
+        """
+
+        _order = Client._validate_order(order) \
+            if order is not None else None
+
+        _output_format = Client._validate_output_format(output_format) \
+            if output_format is not None else None
+
+        return self._api_requester.get(
+            self._build_categories_list_payload(
+                _order,
+                _output_format
+            )
+        )
+
     def data(self, domain: str,
              min_confidence: float or None = None) -> Response:
         """
@@ -105,7 +131,8 @@ class Client:
             raise UnparsableApiResponseError(
                 "Could not find the correct root element.", None)
         except JSONDecodeError as error:
-            raise UnparsableApiResponseError("Could not parse API response", error)
+            raise UnparsableApiResponseError(
+                "Could not parse API response", error) from error
 
     def raw_data(self, domain: str, min_confidence: float or None = None,
                  output_format: str or None = None) -> str:
@@ -177,6 +204,13 @@ class Client:
                              "number in range (0; 1)")
 
     @staticmethod
+    def _validate_order(value: str):
+        if value.upper() in {'ABC', 'ID'}:
+            return value.upper()
+
+        raise ParameterError("order should be 'ABC' or 'ID'")
+
+    @staticmethod
     def _build_payload(
             api_key,
             domain,
@@ -187,6 +221,18 @@ class Client:
             'apiKey': api_key,
             'domainName': domain,
             'minConfidence': min_confidence,
+            'outputFormat': output_format
+        }
+
+        return {k: v for (k, v) in tmp.items() if v is not None}
+
+    @staticmethod
+    def _build_categories_list_payload(
+            order,
+            output_format
+    ) -> dict:
+        tmp = {
+            'order': order,
             'outputFormat': output_format
         }
 

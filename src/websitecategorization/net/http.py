@@ -82,6 +82,22 @@ class ApiRequester:
 
         return ApiRequester._handle_response(response)
 
+    def get_categories(self, payload: dict) -> str:
+        headers = {
+            'User-Agent': ApiRequester.__user_agent,
+            'Connection': 'close'
+        }
+        response = request(
+            "GET",
+            self.base_url+'/categories',
+            params=payload,
+            headers=headers,
+            timeout=(ApiRequester.__connect_timeout, self.timeout)
+        )
+
+        return ApiRequester._handle_response(response)
+            
+
     @staticmethod
     def _handle_response(response: Response) -> str:
         if 200 <= response.status_code < 300:

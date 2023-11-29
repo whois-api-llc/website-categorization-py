@@ -19,6 +19,10 @@ class TestClient(unittest.TestCase):
         response = self.client.data(DOMAIN)
         self.assertIsNot(response.domain_name, '', "Empty domain in response")
 
+    def test_get_categories(self):
+        response = self.client.list_categories()
+        self.assertGreater(len(response), 0)
+
     def test_extra_parameters(self):
         response = self.client.data(domain=DOMAIN, min_confidence=1.0)
         self.assertLessEqual(len(response.categories), 1)
