@@ -96,7 +96,7 @@ class Client:
         _output_format = Client._validate_output_format(output_format) \
             if output_format is not None else None
 
-        return self._api_requester.get(
+        return self._api_requester.get_categories(
             self._build_categories_list_payload(
                 _order,
                 _output_format
