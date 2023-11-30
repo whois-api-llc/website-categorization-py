@@ -26,7 +26,7 @@ exec(read('src/websitecategorization/version.py'), version_content)
 setup(
     name='website-categorization',
     version=version_content['VERSION'],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     license='MIT',
     description='Python client library for Website Categorization API.',
     long_description='%s\n%s' % (
@@ -51,10 +51,11 @@ setup(
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Topic :: Utilities',
     ],
     keywords=[
